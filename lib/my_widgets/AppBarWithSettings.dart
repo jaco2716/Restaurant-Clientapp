@@ -96,7 +96,7 @@ class AppBarWithSettings extends StatelessWidget implements PreferredSizeWidget 
                           decoration: InputDecoration(fillColor: Colors.grey[200], filled: true)),
                     ),
                     Text(printerStatus),
-                    RaisedButton(
+                    ElevatedButton(
                       child: Text('Gem ny printer IP'),
                       onPressed: () {
                         if (tec.text.length >= 11) {
@@ -138,7 +138,7 @@ class AppBarWithSettings extends StatelessWidget implements PreferredSizeWidget 
                         );
                       },
                     ),
-                    RaisedButton(
+                    ElevatedButton(
                         child: Text('Opdater notifikations ID'),
                         onPressed: () async {
                           await _firestore.doc('${F.firestoreCollection}').set({
@@ -159,7 +159,7 @@ class AppBarWithSettings extends StatelessWidget implements PreferredSizeWidget 
                             },
                           );
                         }),
-                    RaisedButton(
+                    ElevatedButton(
                       child: Text('Kopier ID'),
                       onPressed: () {
                         Clipboard.setData(new ClipboardData(text: thisDeviceID));
@@ -173,7 +173,7 @@ class AppBarWithSettings extends StatelessWidget implements PreferredSizeWidget 
                     ),
                     Text(status, textAlign: TextAlign.center),
 
-                    // RaisedButton(
+                    // ElevatedButton(
                     //   child: Text('Tilmeld'),
                     //   onPressed: () {
                     //   _firebaseMessaging.subscribeToTopic('orders').then((value) {
@@ -194,7 +194,7 @@ class AppBarWithSettings extends StatelessWidget implements PreferredSizeWidget 
             );
           }),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
                 child: Text('Close'),
                 onPressed: () {
                   Navigator.of(context).pop();

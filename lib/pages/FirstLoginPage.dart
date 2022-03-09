@@ -18,8 +18,7 @@ class FirstLoginPage extends StatelessWidget {
                 color: Colors.blue[100],
                 child: Container(
                   width: 400,
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
+                  padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 5),
                   child: TextFormField(
                     onSaved: (value) => _password = value,
                     keyboardType: TextInputType.emailAddress,
@@ -36,7 +35,7 @@ class FirstLoginPage extends StatelessWidget {
                 padding: EdgeInsets.symmetric(vertical: 20),
                 width: 400,
                 height: 80,
-                child: RaisedButton(
+                child: ElevatedButton(
                     child: Text('Login'),
                     onPressed: () {
                       final form = _formKey.currentState;
@@ -44,10 +43,7 @@ class FirstLoginPage extends StatelessWidget {
 
                       if (_password == 'j201295') {
                         saveIsLoggedIn(true);
-                        Navigator.of(context).pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (context) => MyApp()),
-                            (route) => false);
+                        Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MyApp()), (route) => false);
                       }
                     }),
               )

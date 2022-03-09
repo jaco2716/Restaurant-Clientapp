@@ -83,12 +83,13 @@ class _CreateNewOrderPageState extends State<CreateNewOrderPage> {
         alignment: Alignment.bottomRight,
         child: Container(
           padding: EdgeInsets.all(30),
-          child: RaisedButton.icon(
-            padding: EdgeInsets.all(20),
+          child: ElevatedButton.icon(
+            style: ElevatedButton.styleFrom(
+              padding: EdgeInsets.all(20),
+              primary: Colors.blue,
+            ),
             label: Text(widget.isEditOrder ? 'Færdig' : 'Gå til kurv'),
-            color: Colors.blue,
-            icon:
-                Icon(widget.isEditOrder ? Icons.check : Icons.shopping_basket),
+            icon: Icon(widget.isEditOrder ? Icons.check : Icons.shopping_basket),
             onPressed: () {
               _confirmBasket();
               // if (widget.isEditOrder) {
@@ -181,9 +182,7 @@ class _CreateNewOrderPageState extends State<CreateNewOrderPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Column(
                     children: [
-                      Text(menuItems[index].id.toString(),
-                          style: TextStyle(
-                              fontSize: 30, fontWeight: FontWeight.bold)),
+                      Text(menuItems[index].id.toString(), style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold)),
                       SizedBox(
                         height: 50,
                         child: Text(
@@ -257,7 +256,7 @@ class _CreateNewOrderPageState extends State<CreateNewOrderPage> {
       setState(() {
         MealsLog.totalPrice += (meal.price * op);
         meal.amount += op;
-        if (meal.meatChoice != null && op < 0) {
+        if (meal.meatChoice.length != 0 && op < 0) {
           meal.meatChoice.forEach((e) {
             e.amount = 0;
           });
@@ -287,23 +286,15 @@ class _CreateNewOrderPageState extends State<CreateNewOrderPage> {
 
       widget.editOrder!.menuOrder = editCartItems;
 
-
       CalculateValues.resetMenuItems();
       // print(widget.editOrder.menuOrder[0].meatChoice[0].amount);
       // print(editCartItems[0].meatChoice[0].amount);
 
       Navigator.of(context).pushAndRemoveUntil(
-          MaterialPageRoute(
-              builder: (context) =>
-                  SingelOrderPage(widget.editOrder!, widget.editOrder!.orderDate),
-              fullscreenDialog: true),
+          MaterialPageRoute(builder: (context) => SingelOrderPage(widget.editOrder!, widget.editOrder!.orderDate), fullscreenDialog: true),
           ModalRoute.withName('/'));
     } else {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => NewOrderCart(_refreshFromNotifyParent),
-              fullscreenDialog: true));
+      Navigator.push(context, MaterialPageRoute(builder: (context) => NewOrderCart(_refreshFromNotifyParent), fullscreenDialog: true));
     }
   }
 
@@ -348,8 +339,7 @@ class _CreateNewOrderPageState extends State<CreateNewOrderPage> {
   //   }
   // }
 
-  Future<bool> postToFireStore(
-      List<MenuItem> editCart, String orderDate) async {
+  Future<bool> postToFireStore(List<MenuItem> editCart, String orderDate) async {
     print('Sending to db');
 
     List<Map<String, dynamic>> finalMenuOrder = [];

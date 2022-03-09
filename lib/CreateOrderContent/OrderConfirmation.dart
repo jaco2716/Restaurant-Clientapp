@@ -74,7 +74,7 @@ class OrderConfirmation extends StatelessWidget {
     //menuItem.meatChoice.forEach((element) {print(element.toString());});
     int totalItemPrice = menuItem.price * menuItem.amount;
     List<int> totalMeatChoicePrice = [];
-    if (menuItem.meatChoice != null) {
+    if (menuItem.meatChoice.length != 0) {
       menuItem.meatChoice.forEach((meat) {
         totalMeatChoicePrice.add(meat.price * meat.amount);
       });
@@ -86,7 +86,7 @@ class OrderConfirmation extends StatelessWidget {
       // leading: Text(
       //   '${menuItem.amount.toString()}',
       // ),
-      subtitle: menuItem.meatChoice != null
+      subtitle: menuItem.meatChoice.length != 0
           ? ListView.builder(
               itemCount: menuItem.meatChoice.length,
               itemBuilder: (BuildContext context, int meatIndex) {
@@ -95,16 +95,14 @@ class OrderConfirmation extends StatelessWidget {
                 return menuItem.meatChoice[meatIndex].amount != 0
                     ? Container(
                         height: 35,
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                '     - ${menuItem.meatChoice[meatIndex].amount}x ${menuItem.meatChoice[meatIndex].title}',
-                              ),
-                              Text(
-                                '+ ${totalMeatChoicePrice[meatIndex].toString()}kr,-',
-                              ),
-                            ]),
+                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                          Text(
+                            '     - ${menuItem.meatChoice[meatIndex].amount}x ${menuItem.meatChoice[meatIndex].title}',
+                          ),
+                          Text(
+                            '+ ${totalMeatChoicePrice[meatIndex].toString()}kr,-',
+                          ),
+                        ]),
                       )
                     : Container();
               },

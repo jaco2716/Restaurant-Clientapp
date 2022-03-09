@@ -4,7 +4,6 @@ import 'package:restaurantclientapp/Model/MealsLog.dart';
 import 'package:restaurantclientapp/Model/MenuItem.dart';
 import 'package:restaurantclientapp/Model/Order.dart';
 
-
 import '../logic/CalculateValues.dart';
 
 class EditSingleOrderPage extends StatelessWidget {
@@ -61,16 +60,14 @@ class EditSingleOrderPage extends StatelessWidget {
   // void clearMenuItems(List<MenuItem> menuItems) {
   //   menuItems.forEach((element) {
   //     element.amount = 0;
-  //     if(element.meatChoice != null)element.meatChoice.forEach((meatelement) => meatelement.amount = 0);
+  //     if(element.meatChoice.length != 0)element.meatChoice.forEach((meatelement) => meatelement.amount = 0);
   //   });
   // }
 
-  void updateFromEditOrder(
-      List<MenuItem> mealLogItems, List<MenuItem> editItems) {
+  void updateFromEditOrder(List<MenuItem> mealLogItems, List<MenuItem> editItems) {
     for (var i = 1; i <= mealLogItems.length; i++) {
       editItems.forEach((editElement) {
-        if (mealLogItems[i - 1].id == editElement.id)
-          mealLogItems[i - 1] = MenuItem.clone(editElement);
+        if (mealLogItems[i - 1].id == editElement.id) mealLogItems[i - 1] = MenuItem.clone(editElement);
       });
     }
   }

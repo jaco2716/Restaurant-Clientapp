@@ -10,11 +10,10 @@ import 'NetworkAnalyzer.dart';
 
 class PosPrinterHandler {
   static String? printerIP;
-  static List<NetworkAddress> addresses =[];
+  static List<NetworkAddress> addresses = [];
   static bool isLoadingPrinterIP = false;
 
-  static printOrder(
-      Order order, BuildContext context, bool checkForPrinters) async {
+  static printOrder(Order order, BuildContext context, bool checkForPrinters) async {
     const esc = '\x1B';
 
     const reset = '$esc@'; // Initialize printer
@@ -48,11 +47,9 @@ class PosPrinterHandler {
       bytes += utf8.encode(' Spiser her \n');
     else
       bytes += utf8.encode(' To go \n');
-    bytes += utf8.encode(
-        ' ${CalculateValues.dateStringFromMili(order.acceptTime).split(' ')[0]} ');
+    bytes += utf8.encode(' ${CalculateValues.dateStringFromMili(order.acceptTime).split(' ')[0]} ');
     bytes += noWhiteOnBlack.codeUnits;
-    bytes += utf8.encode(
-        '  ${CalculateValues.dateStringFromMili(order.acceptTime).split(' ').last}\n');
+    bytes += utf8.encode('  ${CalculateValues.dateStringFromMili(order.acceptTime).split(' ').last}\n');
 
     // bytes += whiteOnBlack.codeUnits;
     // bytes += tripleWide.codeUnits;
@@ -67,24 +64,18 @@ class PosPrinterHandler {
       // bytes += tripleHeight.codeUnits;
       String orderTitleWithoutSpecial;
       orderTitleWithoutSpecial = sortSpecialCharactors(e.title, 'ø', 'oe');
-      orderTitleWithoutSpecial =
-          sortSpecialCharactors(orderTitleWithoutSpecial, 'æ', 'ae');
-      orderTitleWithoutSpecial =
-          sortSpecialCharactors(orderTitleWithoutSpecial, 'å', 'aa');
+      orderTitleWithoutSpecial = sortSpecialCharactors(orderTitleWithoutSpecial, 'æ', 'ae');
+      orderTitleWithoutSpecial = sortSpecialCharactors(orderTitleWithoutSpecial, 'å', 'aa');
       if (e.id < 32) {
         int totalMeat = 0;
-        if (e.meatChoice != null) {
-
+        if (e.meatChoice.length != 0) {
           e.meatChoice.forEach((meatEle) {
             totalMeat += meatEle.amount;
             if (meatEle.amount > 0) {
               String meatTitleWithoutSpecial;
-              meatTitleWithoutSpecial =
-                  sortSpecialCharactors(meatEle.title, 'ø', 'oe');
-              meatTitleWithoutSpecial =
-                  sortSpecialCharactors(meatTitleWithoutSpecial, 'æ', 'ae');
-              bytes += utf8.encode(
-                  '${meatEle.amount}x ${e.id} + $meatTitleWithoutSpecial\n');
+              meatTitleWithoutSpecial = sortSpecialCharactors(meatEle.title, 'ø', 'oe');
+              meatTitleWithoutSpecial = sortSpecialCharactors(meatTitleWithoutSpecial, 'æ', 'ae');
+              bytes += utf8.encode('${meatEle.amount}x ${e.id} + $meatTitleWithoutSpecial\n');
             }
           });
         }
@@ -93,7 +84,7 @@ class PosPrinterHandler {
         }
       } else
         bytes += utf8.encode('${e.amount}x - $orderTitleWithoutSpecial\n');
-      // if (e.meatChoice != null) {
+      // if (e.meatChoice.length != 0) {
       //   //   bytes += doubleWide.codeUnits;
       //   // bytes += doubleHeight.codeUnits;
       //   e.meatChoice.forEach((m) {
@@ -113,8 +104,7 @@ class PosPrinterHandler {
       bytes += utf8.encode('\n');
     });
     // bytes += whiteOnBlack.codeUnits;
-    bytes += utf8.encode(
-        'Total pris: ${CalculateValues.totalPriceFromOrder(order.menuOrder)} kr,-\n');
+    bytes += utf8.encode('Total pris: ${CalculateValues.totalPriceFromOrder(order.menuOrder)} kr,-\n');
     // bytes += noWhiteOnBlack.codeUnits;
     // bytes += utf8.encode('_____________________\n');
     bytes += utf8.encode('\n');
@@ -125,18 +115,12 @@ class PosPrinterHandler {
     if (order.orderMessage != 'Ingen kommentar til restaurenten.') {
       String messageWithoutSpecial = '';
 
-      messageWithoutSpecial =
-          sortSpecialCharactors(order.orderMessage, 'å', 'aa');
-      messageWithoutSpecial =
-          sortSpecialCharactors(messageWithoutSpecial, 'æ', 'ae');
-      messageWithoutSpecial =
-          sortSpecialCharactors(messageWithoutSpecial, 'ø', 'oe');
-      messageWithoutSpecial =
-          sortSpecialCharactors(messageWithoutSpecial, 'Å', 'Aa');
-      messageWithoutSpecial =
-          sortSpecialCharactors(messageWithoutSpecial, 'Æ', 'Ae');
-      messageWithoutSpecial =
-          sortSpecialCharactors(messageWithoutSpecial, 'Ø', 'Oe');
+      messageWithoutSpecial = sortSpecialCharactors(order.orderMessage, 'å', 'aa');
+      messageWithoutSpecial = sortSpecialCharactors(messageWithoutSpecial, 'æ', 'ae');
+      messageWithoutSpecial = sortSpecialCharactors(messageWithoutSpecial, 'ø', 'oe');
+      messageWithoutSpecial = sortSpecialCharactors(messageWithoutSpecial, 'Å', 'Aa');
+      messageWithoutSpecial = sortSpecialCharactors(messageWithoutSpecial, 'Æ', 'Ae');
+      messageWithoutSpecial = sortSpecialCharactors(messageWithoutSpecial, 'Ø', 'Oe');
 
       List<String> messageList = messageWithoutSpecial.split(' ');
       String messageWithBreak = '';
@@ -164,8 +148,7 @@ class PosPrinterHandler {
     printTicket(bytes, context, checkForPrinters);
   }
 
-  static String sortSpecialCharactors(
-      String message, String char, String replaceChar) {
+  static String sortSpecialCharactors(String message, String char, String replaceChar) {
     String newMessage = '';
     List<String> messageList = message.split(char);
     String lastString = messageList.last;
@@ -178,21 +161,15 @@ class PosPrinterHandler {
     return newMessage;
   }
 
-  static printTicket(
-      List<int> bytes, BuildContext context, bool checkForPrinters) async {
+  static printTicket(List<int> bytes, BuildContext context, bool checkForPrinters) async {
     printerIP = await _loadPrinterIP();
     Duration timeout = const Duration(seconds: 5);
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-        duration: timeout,
-
-      content: Container(
-          width: 40,
-          height: 40,
-          child: Center(child: CircularProgressIndicator())),
+      duration: timeout,
+      content: Container(width: 40, height: 40, child: Center(child: CircularProgressIndicator())),
     ));
-    var result = await Socket.connect(printerIP, 9100, timeout: timeout)
-        .then((Socket socket) {
+    var result = await Socket.connect(printerIP, 9100, timeout: timeout).then((Socket socket) {
       socket.add(bytes);
       socket.destroy();
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -204,8 +181,7 @@ class PosPrinterHandler {
       if (checkForPrinters) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text(
-              'Kunne ikke forbinde til printeren. Vær sikker på at den er tændt og klar.  -  Printer IP: $printerIP.'),
+          content: Text('Kunne ikke forbinde til printeren. Vær sikker på at den er tændt og klar.  -  Printer IP: $printerIP.'),
         ));
       }
       // if (checkForPrinters) showSelectPrinterDialog(context);
@@ -277,7 +253,7 @@ class PosPrinterHandler {
   //               }),
   //             ),
   //             actions: [
-  //               FlatButton(
+  //               TextButton(
   //                   onPressed: () {
   //                     Navigator.of(context).pop();
   //                   },

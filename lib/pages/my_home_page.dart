@@ -97,7 +97,6 @@ class _MyHomePageState extends State<MyHomePage> {
       sound: true,
     );
 
-
     print('User granted permission: ${settings.authorizationStatus}');
 
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -154,8 +153,10 @@ class _MyHomePageState extends State<MyHomePage> {
                   child: Container(
                     width: 200,
                     height: 50,
-                    child: RaisedButton(
-                      color: Colors.red,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.red,
+                      ),
                       child: Text('Close me!'),
                       onPressed: () {
                         // player.stop();
@@ -168,7 +169,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   padding: EdgeInsets.only(right: 10),
                   width: 210,
                   height: 50,
-                  child: RaisedButton(
+                  child: ElevatedButton(
                       child: Text('Go to order'),
                       onPressed: () {
                         // player.stop();
@@ -228,7 +229,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
                 child: Text('Close'),
                 onPressed: () {
                   Navigator.of(context).pop();

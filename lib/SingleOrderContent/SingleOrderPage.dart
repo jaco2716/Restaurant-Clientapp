@@ -30,16 +30,12 @@ class _SingelOrderPageState extends State<SingelOrderPage> {
   Widget build(BuildContext context) {
     // print('meeet '+widget.order.menuOrder[0].meatChoice[0].amount.toString());
     //TODO change from testorders
-    docRef = _firestore
-        .collection('${F.firestoreCollection}/orders')
-        .doc(widget.order.orderDate);
+    docRef = _firestore.collection('${F.firestoreCollection}/orders').doc(widget.order.orderDate);
     //print(widget.order.restaurantMessage);
     if (widget.order.orderAccepted)
       orderDoneText =
           'Ordren blev accepteret. \n Afhent kl: ${CalculateValues.dateStringFromMili(widget.order.acceptTime)}\n\nBesked:\n${widget.order.restaurantMessage}';
-    else if (widget.order.orderDone)
-      orderDoneText =
-          'Ordren blev afvist med besked: \n${widget.order.restaurantMessage}';
+    else if (widget.order.orderDone) orderDoneText = 'Ordren blev afvist med besked: \n${widget.order.restaurantMessage}';
 
     return Scaffold(
       // appBar: AppBarLeo('Ordre Nr: ${widget.order.orderDate}'),
@@ -55,8 +51,10 @@ class _SingelOrderPageState extends State<SingelOrderPage> {
         ),
         actions: [
           (widget.order.orderDone || widget.order.orderAccepted)
-              ? RaisedButton(
-                  color: Colors.blue,
+              ? ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    primary: Colors.blue,
+                  ),
                   child: Text('Fortryd Bestilling'),
                   onPressed: () {
                     restoreOrder();
@@ -81,14 +79,11 @@ class _SingelOrderPageState extends State<SingelOrderPage> {
                     children: [
                       ListTile(
                         title: Text('Navn: ${widget.order.user.fullName}'),
-                        subtitle: Text(
-                            'Tlf: ${widget.order.user.phoneNr} \nE-mail: ${widget.order.user.email}'),
+                        subtitle: Text('Tlf: ${widget.order.user.phoneNr} \nE-mail: ${widget.order.user.email}'),
                       ),
                       Divider(),
                       Text('Bestilt ${widget.dateString}'),
-                      widget.order.orderAccepted || widget.order.orderDone
-                          ? orderAcceptedWidgets()
-                          : acceptOrderWidgets(),
+                      widget.order.orderAccepted || widget.order.orderDone ? orderAcceptedWidgets() : acceptOrderWidgets(),
                     ],
                   ),
                 ),
@@ -105,8 +100,7 @@ class _SingelOrderPageState extends State<SingelOrderPage> {
                         shrinkWrap: true,
                         itemCount: widget.order.menuOrder.length,
                         itemBuilder: (_, int index) {
-                          return OrderItemListTile(
-                              widget.order.menuOrder[index]);
+                          return OrderItemListTile(widget.order.menuOrder[index]);
                         },
                         physics: NeverScrollableScrollPhysics(),
                       ),
@@ -124,16 +118,14 @@ class _SingelOrderPageState extends State<SingelOrderPage> {
                         padding: const EdgeInsets.all(12.0),
                         child: Text(widget.order.orderMessage),
                       ),
-                      RaisedButton(
-                        color: Colors.blue,
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          primary: Colors.blue,
+                        ),
                         child: Text('Rediger ordre'),
                         onPressed: () {
                           CalculateValues.resetMenuItems();
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => EditSingleOrderPage(widget.order),
-                                  fullscreenDialog: true));
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => EditSingleOrderPage(widget.order), fullscreenDialog: true));
                         },
                       )
                     ],
@@ -152,9 +144,7 @@ class _SingelOrderPageState extends State<SingelOrderPage> {
       padding: const EdgeInsets.symmetric(vertical: 50),
       child: Column(
         children: [
-          widget.order.orderAccepted
-              ? Icon(Icons.check_circle, size: 60, color: Colors.green)
-              : Icon(Icons.cancel, size: 60, color: Colors.red),
+          widget.order.orderAccepted ? Icon(Icons.check_circle, size: 60, color: Colors.green) : Icon(Icons.cancel, size: 60, color: Colors.red),
           Text(
             orderDoneText,
             textAlign: TextAlign.center,
@@ -179,8 +169,10 @@ class _SingelOrderPageState extends State<SingelOrderPage> {
             'Kan hentes om $hourAmount timer og $minuteAmount min.\nKl: ${CalculateValues.dateStringFromMili((DateTime.now().millisecondsSinceEpoch + ((minuteAmount + (hourAmount * 60)) * 60000)).toString())}',
             style: TextStyle(fontWeight: FontWeight.bold),
             textAlign: TextAlign.center),
-        RaisedButton(
-            color: Colors.blue,
+        ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: Colors.blue,
+            ),
             child: Text('Vælg afhænt tidspunkt'),
             onPressed: () {
               showCartBottomSheet(context);
@@ -188,12 +180,14 @@ class _SingelOrderPageState extends State<SingelOrderPage> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            RaisedButton(
+            ElevatedButton(
               child: Text('Accepter'),
               onPressed: acceptOrder,
             ),
-            RaisedButton(
-              color: Colors.red,
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                primary: Colors.red,
+              ),
               child: Text('    Afvis    '),
               onPressed: declineOrder,
             )
@@ -205,9 +199,7 @@ class _SingelOrderPageState extends State<SingelOrderPage> {
             padding: EdgeInsets.symmetric(horizontal: 30.0, vertical: 10),
             color: Colors.grey[200],
             child: TextField(
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: 'Skriv kommentar til kunden.'),
+              decoration: InputDecoration(border: InputBorder.none, hintText: 'Skriv kommentar til kunden.'),
               scrollPadding: EdgeInsets.all(0),
               textCapitalization: TextCapitalization.sentences,
               textInputAction: TextInputAction.newline,
@@ -217,29 +209,32 @@ class _SingelOrderPageState extends State<SingelOrderPage> {
             ),
           ),
         ),
-        RaisedButton(
-          color: Colors.blue,
-          child: Text(
-              'Vi har travlt og tager ikke imod flere bestillinger i dag.'),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.blue,
+          ),
+          child: Text('Vi har travlt og tager ikke imod flere bestillinger i dag.'),
           onPressed: () {
             setState(() {
-              _textEditingController.text =
-                  'Vi har travlt og tager ikke imod flere bestillinger i dag.';
+              _textEditingController.text = 'Vi har travlt og tager ikke imod flere bestillinger i dag.';
             });
           },
         ),
-        RaisedButton(
-          color: Colors.blue,
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.blue,
+          ),
           child: Text('Ring til os angående din bestilling.'),
           onPressed: () {
             setState(() {
-              _textEditingController.text =
-                  'Ring til os angående din bestilling.';
+              _textEditingController.text = 'Ring til os angående din bestilling.';
             });
           },
         ),
-        RaisedButton(
-          color: Colors.blue,
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.blue,
+          ),
           child: Text('Vi har desværre lukket for i dag.'),
           onPressed: () {
             setState(() {
@@ -258,8 +253,7 @@ class _SingelOrderPageState extends State<SingelOrderPage> {
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
-          return StatefulBuilder(
-              builder: (BuildContext context, StateSetter setModalState) {
+          return StatefulBuilder(builder: (BuildContext context, StateSetter setModalState) {
             return Container(
               height: 300,
               child: Center(
@@ -284,8 +278,7 @@ class _SingelOrderPageState extends State<SingelOrderPage> {
                             }),
                         Padding(
                           padding: const EdgeInsets.all(12.0),
-                          child: Text(collectHourAmount.toString() + ' Timer',
-                              textScaleFactor: 3),
+                          child: Text(collectHourAmount.toString() + ' Timer', textScaleFactor: 3),
                         ),
                         IconButton(
                             icon: Icon(Icons.add),
@@ -314,8 +307,7 @@ class _SingelOrderPageState extends State<SingelOrderPage> {
                             }),
                         Padding(
                           padding: const EdgeInsets.all(12.0),
-                          child: Text(collectMinuteAmount.toString() + ' Min',
-                              textScaleFactor: 3),
+                          child: Text(collectMinuteAmount.toString() + ' Min', textScaleFactor: 3),
                         ),
                         IconButton(
                             icon: Icon(Icons.add),
@@ -330,7 +322,7 @@ class _SingelOrderPageState extends State<SingelOrderPage> {
                             }),
                       ],
                     ),
-                    RaisedButton(
+                    ElevatedButton(
                       child: Text('Opdater Tidspunkt'),
                       onPressed: () {
                         setState(() {
@@ -365,19 +357,12 @@ class _SingelOrderPageState extends State<SingelOrderPage> {
   }
 
   void acceptOrder() async {
-    _textEditingController.text == null ||
-            _textEditingController.text.length < 1
+    _textEditingController.text == null || _textEditingController.text.length < 1
         ? widget.order.restaurantMessage = 'Ingen besked.'
         : widget.order.restaurantMessage = _textEditingController.text;
-    String date = (DateTime.now().millisecondsSinceEpoch +
-            ((minuteAmount + (hourAmount * 60)) * 60000))
-        .toString();
+    String date = (DateTime.now().millisecondsSinceEpoch + ((minuteAmount + (hourAmount * 60)) * 60000)).toString();
     await docRef!
-        .update({
-          'acceptTime': date,
-          'orderAccepted': true,
-          'restaurantMessage': widget.order.restaurantMessage
-        })
+        .update({'acceptTime': date, 'orderAccepted': true, 'restaurantMessage': widget.order.restaurantMessage})
         .then((value) => print('Accept Success'))
         .catchError((error) => print('Accept error'));
 
@@ -417,7 +402,7 @@ class OrderItemListTile extends StatelessWidget {
     return ListTile(
       leading: Text(menuItem.id.toString()),
       title: Text(menuItem.title),
-      subtitle: menuItem.meatChoice != null
+      subtitle: menuItem.meatChoice.length != 0
           ? ListView.builder(
               itemCount: menuItem.meatChoice.length,
               itemBuilder: (BuildContext context, int meatIndex) {
@@ -426,13 +411,11 @@ class OrderItemListTile extends StatelessWidget {
                 return menuItem.meatChoice[meatIndex].amount != 0
                     ? Container(
                         height: 35,
-                        child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                '     - ${menuItem.meatChoice[meatIndex].amount}x ${menuItem.meatChoice[meatIndex].title}',
-                              ),
-                            ]),
+                        child: Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                          Text(
+                            '     - ${menuItem.meatChoice[meatIndex].amount}x ${menuItem.meatChoice[meatIndex].title}',
+                          ),
+                        ]),
                       )
                     : Container();
               },

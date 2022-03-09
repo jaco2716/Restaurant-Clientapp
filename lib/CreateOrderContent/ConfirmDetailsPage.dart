@@ -4,12 +4,9 @@ import 'package:restaurantclientapp/Model/MealsLog.dart';
 import 'package:restaurantclientapp/Model/MenuItem.dart';
 import 'package:restaurantclientapp/Model/Order.dart';
 import 'package:restaurantclientapp/Model/OrderUser.dart';
-
-import '../my_widgets/AppBarWithSettings.dart';
 import '../logic/CalculateValues.dart';
 import '../logic/PosPrinterHandler.dart';
 import '../flavors.dart';
-import '../main.dart';
 import '../pages/my_home_page.dart';
 import 'LatestOrderListPage.dart';
 import 'OrderConfirmation.dart';
@@ -44,8 +41,10 @@ class _ConfirmDetailsPageState extends State<ConfirmDetailsPage> {
     return Scaffold(
       floatingActionButton: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: RaisedButton(
-          color: Colors.teal,
+        child: ElevatedButton(
+          style: ElevatedButton.styleFrom(
+            primary: Colors.teal,
+          ),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 20),
             child: Text('Senest afhentningstid'),
@@ -122,10 +121,12 @@ class _ConfirmDetailsPageState extends State<ConfirmDetailsPage> {
                               height: 60,
                               padding: EdgeInsets.all(4),
                               width: double.infinity,
-                              child: RaisedButton(
-                                  elevation: 10,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    elevation: 10,
+                                    primary: Colors.blue,
+                                  ),
                                   child: Text('Tilføj kommentar til ordren.'),
-                                  color: Colors.blue,
                                   onPressed: () {
                                     _buildAddMessageDialog(context);
                                   }),
@@ -149,8 +150,10 @@ class _ConfirmDetailsPageState extends State<ConfirmDetailsPage> {
                               height: 60,
                               padding: EdgeInsets.all(4),
                               width: double.infinity,
-                              child: RaisedButton(
-                                  color: Colors.blue,
+                              child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    primary: Colors.blue,
+                                  ),
                                   child: Text('Vælg afhent tidspunkt'),
                                   onPressed: () {
                                     showCartBottomSheet(context);
@@ -198,7 +201,7 @@ class _ConfirmDetailsPageState extends State<ConfirmDetailsPage> {
                   width: double.infinity,
                   padding: EdgeInsets.all(4),
                   height: 60,
-                  child: RaisedButton(
+                  child: ElevatedButton(
                       onPressed: () {
                         // confirmOrder();
                         onConfirmPressed();
@@ -260,12 +263,12 @@ class _ConfirmDetailsPageState extends State<ConfirmDetailsPage> {
             ),
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
                 child: Text('Luk'),
                 onPressed: () {
                   Navigator.of(context).pop();
                 }),
-            RaisedButton(
+            ElevatedButton(
                 child: Text('Tilføj'),
                 onPressed: () {
                   setState(() {
@@ -292,7 +295,7 @@ class _ConfirmDetailsPageState extends State<ConfirmDetailsPage> {
             child: LatestOrderListPage(10),
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
                 child: Text('Luk'),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -385,7 +388,7 @@ class _ConfirmDetailsPageState extends State<ConfirmDetailsPage> {
                             }),
                       ],
                     ),
-                    RaisedButton(
+                    ElevatedButton(
                       child: Text('Opdater Tidspunkt'),
                       onPressed: () {
                         setState(() {
@@ -423,9 +426,8 @@ class _ConfirmDetailsPageState extends State<ConfirmDetailsPage> {
       String finalName = _name ?? 'Admin';
       finalName += finalName.length < 1 ? 'Admin' : '';
       finalName += isTogo ? ' - To go' : ' - Spiser her';
-      String finalPhone = _name ?? 'Admin';
+      String finalPhone = _phoneNr ?? 'Admin';
       finalPhone += finalPhone.length < 1 ? 'Admin' : '';
-
 
       OrderUser user = OrderUser(
         uid: 'Admin',
@@ -452,6 +454,7 @@ class _ConfirmDetailsPageState extends State<ConfirmDetailsPage> {
 
       MealsLog.pageIndex = 0;
 
+//TODO change to scaffold messenger
       Navigator.of(context).pop();
       Navigator.of(context).pushAndRemoveUntil(MaterialPageRoute(builder: (context) => MyHomePage()), (route) => false);
 
@@ -466,61 +469,9 @@ class _ConfirmDetailsPageState extends State<ConfirmDetailsPage> {
 
 //Bekræft og send ordre button
   void confirmOrder(Order finalOrder, String orderDate) async {
-    // showDialog(
-    //   builder: (context) {
-    //     return AlertDialog(
-    //       elevation: 0,
-    //       backgroundColor: Colors.transparent,
-    //       content: Center(child: CircularProgressIndicator()),
-    //     );
-    //   },
-    //   context: context,
-    // );
-
-    // try {
-    // final form = _formKey.currentState;
-    // form.save();
-
-    // User user = User();
-    // user.uid = 'Admin';
-    // user.email = 'Admin';
-    // user.fullName = _name == null || _name.length < 1 ? 'Admin' : _name;
-    // user.phoneNr = _phoneNr == null || _phoneNr.length < 1 ? 'Admin' : _phoneNr;
-
-    // String acceptDate =
-    //     (DateTime.now().millisecondsSinceEpoch + (timeAmount * 60000))
-    //         .toString();
-    // //Create Order
-    // String orderDate = DateTime.now().millisecondsSinceEpoch.toString();
-    // Order finalOrder = Order(
-    //     menuOrder: widget.cartItems,
-    //     user: user,
-    //     orderDate: orderDate,
-    //     orderDone: false,
-    //     orderAccepted: true,
-    //     acceptTime: acceptDate,
-    //     restaurantMessage: 'No message',
-    //     orderMessage: orderMessage);
-
     PosPrinterHandler.printOrder(finalOrder, context, false);
-
     await postToFireStore(finalOrder, orderDate);
-
     CalculateValues.resetMenuItems();
-
-    // Navigator.of(context).pop();
-    // Navigator.of(context).pushAndRemoveUntil(
-    //     MaterialPageRoute(builder: (context) => MyHomePage()),
-    //     (route) => false);
-    // print('Success????');
-
-    // } catch (e) {
-    //   Navigator.of(context).pop();
-    //   print('Caught error');
-    //   print('Error: ${e.toString()}');
-    //   _buildDialog(
-    //       context, 'Der skete en fejl', 'Der kan ikke forbindes til serveren.');
-    // }
   }
 
   Future _buildDialog(BuildContext context, String _title, String _message) {
@@ -536,7 +487,7 @@ class _ConfirmDetailsPageState extends State<ConfirmDetailsPage> {
             textAlign: TextAlign.center,
           ),
           actions: <Widget>[
-            FlatButton(
+            TextButton(
                 child: Text('Ok'),
                 onPressed: () {
                   Navigator.of(context).pop();
@@ -547,27 +498,6 @@ class _ConfirmDetailsPageState extends State<ConfirmDetailsPage> {
       context: context,
     );
   }
-
-  // resetMenuItems() {
-  //   print('reset');
-  //   MealsLog.totalPrice = 0;
-  //   //TODO = DONE? Change to final static lists
-  //   clearMenuItems(MealsLog.smallMeals);
-  //   clearMenuItems(MealsLog.soups);
-  //   clearMenuItems(MealsLog.noodlesAndFriedRice);
-  //   clearMenuItems(MealsLog.mainMealWithRice);
-  //   clearMenuItems(MealsLog.specialMealsWithRice);
-  //   clearMenuItems(MealsLog.vegetaryVeganMeals);
-  //   clearMenuItems(MealsLog.salads);
-  //   clearMenuItems(MealsLog.childMeals);
-  //   clearMenuItems(MealsLog.accessoriesItems);
-  // }
-
-  // void clearMenuItems(List<MenuItem> menuItems) {
-  //   menuItems.forEach((element) {
-  //     element.amount = 0;
-  //   });
-  // }
 
 //Send order to database
   Future<bool> postToFireStore(Order finalOrder, String orderDate) async {

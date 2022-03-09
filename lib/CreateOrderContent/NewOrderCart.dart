@@ -34,7 +34,7 @@ class _NewOrderCartState extends State<NewOrderCart> {
     cartItems.forEach((element) {
       int meatChoiceTotal = 0;
       int meatTotalAmount = 0;
-      if (element.meatChoice != null) {
+      if (element.meatChoice.length != 0) {
         element.meatChoice.forEach((meat) {
           meatTotalAmount += meat.amount;
           meatChoiceTotal += meat.price * meat.amount;
@@ -79,7 +79,7 @@ class _NewOrderCartState extends State<NewOrderCart> {
               padding: EdgeInsets.symmetric(horizontal: 20),
               width: double.infinity,
               height: 50,
-              child: RaisedButton(
+              child: ElevatedButton(
                   onPressed: cartItems.isEmpty
                       ? null
                       : () {
@@ -152,7 +152,7 @@ class _NewOrderCartState extends State<NewOrderCart> {
     int totalItemPrice = menuItem.price * menuItem.amount;
     int totalMeatChoiceAmount = 0;
     List<int> totalMeatChoicePrice = [];
-    if (menuItem.meatChoice != null) {
+    if (menuItem.meatChoice.length != 0) {
       menuItem.meatChoice.forEach((meat) {
         totalMeatChoicePrice.add(meat.price * meat.amount);
         totalMeatChoiceAmount += meat.amount;
@@ -165,7 +165,7 @@ class _NewOrderCartState extends State<NewOrderCart> {
         child: Column(children: [
           ListTile(
               title: Text("Nr.${menuItem.id} - ${menuItem.title}"),
-              subtitle: menuItem.meatChoice != null
+              subtitle: menuItem.meatChoice.length != 0
                   ? totalMeatChoiceAmount < 1
                       ? Text('Tryk her for andet kød/vegetar.')
                       : ListView.builder(
@@ -201,249 +201,22 @@ class _NewOrderCartState extends State<NewOrderCart> {
   }
 
   showCartBottomSheet(BuildContext context, MenuItem menuItem) {
-    int itemAmount = menuItem.amount;
-    // List<MeatChoice> modalMeatChoice = new List<MeatChoice>();
-    // modalMeatChoice.clear();
     print('open modal');
-
     showModalBottomSheet(
         enableDrag: false,
         isDismissible: false,
         isScrollControlled: true,
         context: context,
         builder: (BuildContext context) {
-          // if (menuItem.id > 5 && menuItem.id < 8)
-          //   soupMeatChoice.forEach((element) => modalMeatChoice.add(MeatChoice(element.title, element.price, element.value, element.amount)));
-          // else if (menuItem.id > 7 && menuItem.id < 11)
-          //   noodleAndFriedRiceMeatChoice
-          //       .forEach((element) => modalMeatChoice.add(MeatChoice(element.title, element.price, element.value, element.amount)));
-          // else if (menuItem.id > 10 && menuItem.id < 21)
-          //   mainMealWithRiceMeatChoice
-          //       .forEach((element) => modalMeatChoice.add(element));
-
-          //print(modalMeatChoice.length);
           return CartItemsBottomSheet(
             context,
             menuItem,
             notifyParent: _refreshFromParent,
           );
-          // return StatefulBuilder(
-          //     builder: (BuildContext context, StateSetter setModalState) {
-          //   int totalExtraMeat = 0;
-          //   if (menuItem.meatChoice != null) {
-          //     menuItem.meatChoice.forEach((element) {
-          //       totalExtraMeat += element.amount;
-          //       print('meat: ${element.amount}');
-          //     });
-          //   }
-          //   //print(menuItem.meatChoice.toString());
-          //   // menuItem.meatChoice.forEach((element) {
-          //   //   totalExtraMeat += element.amount;
-          //   // });
-          //   // modalMeatChoice.forEach((element) {
-          //   //   totalExtraMeat += element.amount;
-          //   // });
-          //   return Padding(
-          //     padding: const EdgeInsets.all(30.0),
-          //     child: Wrap(children: [
-          //       Center(
-          //         child: Container(
-          //           width: 400,
-          //           //height: 600,
-          //           child: Center(
-          //             child: Column(
-          //               mainAxisAlignment: MainAxisAlignment.center,
-          //               children: <Widget>[
-          //                 menuItem.meatChoice == null
-          //                     ? Center()
-          //                     : Column(children: [
-          //                         Text('Vælg andet end kylling'),
-          //                         ListView.builder(
-          //                           itemCount: menuItem.meatChoice.length,
-          //                           itemBuilder:
-          //                               (BuildContext context, int index) {
-          //                             // if (firstOpen) {
-          //                             //   modalMeatChoice.forEach((element) =>
-          //                             //       tempMeatChoice.add(element));
-          //                             //   firstOpen = false;
-          //                             // }
-          //                             return Container(
-          //                               height: 40,
-          //                               width: double.infinity,
-          //                               //color: Colors.red,
-          //                               child: ListTile(
-          //                                 contentPadding: EdgeInsets.symmetric(
-          //                                     horizontal: 4),
-          //                                 title: Text(
-          //                                     '${menuItem.meatChoice[index].title}  +${menuItem.meatChoice[index].price}kr,-'),
-          //                                 trailing: Container(
-          //                                   width: 130,
-          //                                   child: Row(
-          //                                     mainAxisAlignment:
-          //                                         MainAxisAlignment.center,
-          //                                     children: <Widget>[
-          //                                       IconButton(
-          //                                           icon: Icon(Icons.remove),
-          //                                           iconSize: 30,
-          //                                           color: Colors.red,
-          //                                           onPressed: () {
-          //                                             if (menuItem
-          //                                                     .meatChoice[index]
-          //                                                     .amount >=
-          //                                                 1) {
-          //                                               setModalState(() {
-          //                                                 menuItem
-          //                                                     .meatChoice[index]
-          //                                                     .amount--;
-          //                                               });
-          //                                             }
-          //                                           }),
-          //                                       Padding(
-          //                                         padding: const EdgeInsets.all(
-          //                                             12.0),
-          //                                         child: Text(menuItem
-          //                                             .meatChoice[index].amount
-          //                                             .toString()),
-          //                                       ),
-          //                                       IconButton(
-          //                                           icon: Icon(Icons.add),
-          //                                           iconSize: 30,
-          //                                           color: Colors.green,
-          //                                           onPressed: () {
-          //                                             if (totalExtraMeat <
-          //                                                 itemAmount) {
-          //                                               setModalState(() {
-          //                                                 menuItem
-          //                                                     .meatChoice[index]
-          //                                                     .amount++;
-          //                                               });
-          //                                             }
-          //                                           }),
-          //                                     ],
-          //                                   ),
-          //                                 ),
-          //                               ),
-          //                             );
-          //                           },
-          //                           physics: NeverScrollableScrollPhysics(),
-          //                           shrinkWrap: true,
-          //                         ),
-          //                       ]),
-          //                 Text(menuItem.title, textScaleFactor: 1.5),
-          //                 Text(menuItem.price.toString() + ' kr,-'),
-          //                 Row(
-          //                   mainAxisAlignment: MainAxisAlignment.center,
-          //                   children: <Widget>[
-          //                     IconButton(
-          //                         icon: Icon(Icons.remove),
-          //                         iconSize: 35,
-          //                         color: Colors.red,
-          //                         onPressed: () {
-          //                           if (itemAmount > 1) {
-          //                             setModalState(() {
-          //                               itemAmount--;
-          //                               menuItem.meatChoice.forEach(
-          //                                   (element) => element.amount = 0);
-          //                             });
-          //                           }
-          //                         }),
-          //                     Padding(
-          //                       padding: const EdgeInsets.all(12.0),
-          //                       child: Text(itemAmount.toString(),
-          //                           textScaleFactor: 3),
-          //                     ),
-          //                     IconButton(
-          //                         icon: Icon(Icons.add),
-          //                         iconSize: 35,
-          //                         color: Colors.green,
-          //                         onPressed: () {
-          //                           setModalState(() {
-          //                             itemAmount++;
-          //                           });
-          //                         }),
-          //                   ],
-          //                 ),
-          //                 FlatButton(
-          //                   padding: EdgeInsets.symmetric(
-          //                       vertical: 15, horizontal: 45),
-          //                   child: Text('Fjern fra ordre'),
-          //                   textColor: Colors.red,
-          //                   onPressed: () {
-          //                     //TODO = DONE? ChangeTo final Static lists
-          //                     updateOrder(MealsLog.smallMeals, menuItem, 0);
-          //                     updateOrder(MealsLog.soups, menuItem, 0);
-          //                     updateOrder(
-          //                         MealsLog.noodlesAndFriedRice, menuItem, 0);
-          //                     updateOrder(
-          //                         MealsLog.mainMealWithRice, menuItem, 0);
-          //                     updateOrder(
-          //                         MealsLog.specialMealsWithRice, menuItem, 0);
-          //                     updateOrder(
-          //                         MealsLog.vegetaryVeganMeals, menuItem, 0);
-          //                     updateOrder(MealsLog.salads, menuItem, 0);
-          //                     updateOrder(MealsLog.childMeals, menuItem, 0);
-          //                     updateOrder(
-          //                         MealsLog.accessoriesItems, menuItem, 0);
-
-          //                     setState(() {});
-
-          //                     Navigator.pop(context);
-          //                   },
-          //                 ),
-          //                 SizedBox(
-          //                   height: 10,
-          //                 ),
-          //                 RaisedButton(
-          //                   padding: EdgeInsets.symmetric(
-          //                       vertical: 15, horizontal: 70),
-          //                   child: Text('Færdig'),
-          //                   onPressed: () {
-          //                     //TODO = DONE? ChangeTo final Static lists
-          //                     updateOrder(
-          //                         MealsLog.smallMeals, menuItem, itemAmount);
-          //                     updateOrder(MealsLog.soups, menuItem, itemAmount);
-          //                     updateOrder(MealsLog.noodlesAndFriedRice,
-          //                         menuItem, itemAmount);
-          //                     updateOrder(MealsLog.mainMealWithRice, menuItem,
-          //                         itemAmount);
-          //                     updateOrder(MealsLog.specialMealsWithRice,
-          //                         menuItem, itemAmount);
-          //                     updateOrder(MealsLog.vegetaryVeganMeals, menuItem,
-          //                         itemAmount);
-          //                     updateOrder(
-          //                         MealsLog.salads, menuItem, itemAmount);
-          //                     updateOrder(
-          //                         MealsLog.childMeals, menuItem, itemAmount);
-          //                     updateOrder(MealsLog.accessoriesItems, menuItem,
-          //                         itemAmount);
-
-          //                     setState(() {});
-          //                     Navigator.pop(context);
-          //                   },
-          //                 ),
-          //               ],
-          //             ),
-          //           ),
-          //         ),
-          //       ),
-          //     ]),
-          //   );
-          // });
         });
   }
 
   _refreshFromParent(int i) {
     setState(() {});
-  }
-
-  void updateOrder(List<MenuItem> menuItems, MenuItem newItem, int newAmount) {
-    menuItems.forEach((element) {
-      if (element.id == newItem.id) {
-        element.amount = newAmount;
-        if (newAmount == 0 && element.meatChoice != null) {
-          element.meatChoice.forEach((element) => element.amount = 0);
-        }
-      }
-    });
   }
 }

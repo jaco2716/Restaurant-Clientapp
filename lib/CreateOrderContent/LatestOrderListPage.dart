@@ -1,6 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:restaurantclientapp/Model/MealsLog.dart';
 import 'package:restaurantclientapp/Model/Order.dart';
 import '../flavors.dart';
 import 'LatestOrderRow.dart';
@@ -24,18 +23,13 @@ class _LatestOrderListPageState extends State<LatestOrderListPage> {
         LatestOrderRow(),
         Divider(),
         StreamBuilder<QuerySnapshot>(
-          //TODO change from testorders
-            stream: _firestore
-                .collection('${F.firestoreCollection}/orders')
-                .orderBy('acceptTime', descending: true)
-                .limit(widget.orderLimit)
-                .snapshots(),
-            builder:
-                (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            //TODO change from testorders
+            stream:
+                _firestore.collection('${F.firestoreCollection}/orders').orderBy('acceptTime', descending: true).limit(widget.orderLimit).snapshots(),
+            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
               if (!snapshot.hasData)
                 return Text("You have no new orders");
-              else if (snapshot.hasError)
-                return Text('Error: ${snapshot.error}');
+              else if (snapshot.hasError) return Text('Error: ${snapshot.error}');
               switch (snapshot.connectionState) {
                 case ConnectionState.waiting:
                   return Text('Loading...');
